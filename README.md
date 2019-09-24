@@ -1,4 +1,4 @@
-# JOSE Chacha RFC Draft
+# JOSE ECDH-SS RFC Draft
 
 This is a collaborative effort to publish an RFC draft for the IETF
 covering the use of ECDH Static-Static key agreement  in the JOSE context.
