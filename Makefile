@@ -12,7 +12,7 @@ clean:
 	rm -f $(TARGETS) draft-amringer-jose-ecdh-ss-00.xml
 	rm -rf pages
 
-draft-amringer-jose-chacha-rfc-01.xml: jose-ecdh-ss.md
+draft-amringer-jose-ecdh-ss-00.xml: jose-ecdh-ss.md
 	mmark -xml2 -page $< $@
 
 %.txt: %.xml

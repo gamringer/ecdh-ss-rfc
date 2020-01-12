@@ -49,7 +49,7 @@ thumbprints for it ("JSON Web Key (JWK) Thumbprint") in [@!RFC7638].
 # Key Agreement with Elliptic Curve Diffie-Hellman Static-Static
 
 This section defines the specifics of key agreement with Elliptic Curve
-Diffie-Hellman Static-Static [@!RFC6090], in combination with the Concat KDF,
+Diffie-Hellman Static-Static, in combination with the Concat KDF,
 as defined in
 [Section 5.8.2.1 of NIST.800-56A](https://csrc.nist.gov/publications/detail/sp/800-56a/rev-3/final)
 for use as a symmetric key to wrap the CEK with the "C20PKW", "XC20PKW",
@@ -57,7 +57,9 @@ for use as a symmetric key to wrap the CEK with the "C20PKW", "XC20PKW",
 mode.
 
 This mode is used as defined as the atlernate way for ECDH-ES in
-[Section 4.6.2 of RFC7518](https://tools.ietf.org/html/rfc7518#section-4.6.2).
+[Section 4.6.2 of RFC7518](https://tools.ietf.org/html/rfc7518#section-4.6.2)
+where the "apu" parameter MUST represent a random 512-bit
+value (analogous to PartyAInfo in Ephemeral-Static mode in [@!RFC2631]).
 
 The following "alg" (algorithm) Header Parameter values are used to indicate
 that the JWE Encrypted Key is the result of encrypting the CEK using the
@@ -71,6 +73,52 @@ corresponding algorithm:
 | ECDH-SS+A128KW | ECDH-SS using Concat KDF and CEK wrapped with A128KW |
 | ECDH-SS+A192KW | ECDH-SS using Concat KDF and CEK wrapped with A192KW |
 | ECDH-SS+A256KW | ECDH-SS using Concat KDF and CEK wrapped with A256KW |
+
+## Header Parameters Used for ECDH Key Agreement
+
+The following Header Parameters are used.
+
+### "spk" (Sender Public Key) Header Parameter
+
+The "spk" (sender public key) value created by the originator for
+the use in key agreement algorithms.  This key is represented either
+directly as a JSON Web Key [JWK] public key value, or encapsulated inside
+a JWE encoded using the compact serialization.  The JWK MUST contain only
+public key parameters and SHOULD contain only the minimum JWK parameters
+necessary to represent the key; other JWK parameters included can be checked
+for consistency and honored, or they can be ignored.  This Header Parameter
+MUST be present and MUST be understood and processed by implementations when
+an algorithm from this document is used.
+
+### "apu" (Agreement PartyUInfo) Header Parameter
+
+The "apu" (agreement PartyUInfo) value for key agreement, represented
+as a base64url-encoded string.  Its value contains a random 512-bit
+value.  Use of this Header Parameter is REQUIRED.  This Header
+Parameter MUST be understood and processed by implementations when
+an algorithm from this document is used.
+
+## Header Parameters Used for Key Encryption
+
+The following Header Parameters are used when the chosen "alg" algorithm
+includes a key encryption step.
+
+### "iv" (Initialization Vector) Header Parameter
+
+The "iv" (initialization vector) Header Parameter value is the
+base64url-encoded representation of the 96-bit or 192-bit nonce value used
+for the key encryption operation.  This Header Parameter MUST be present
+and MUST be understood and processed by implementations when an algorithm
+from this document is used.
+
+### "tag" (Authentication Tag) Header Parameter
+
+The "tag" (authentication tag) Header Parameter value is the
+base64url-encoded representation of the 128-bit Authentication Tag
+value resulting from the key encryption operation.  This Header
+Parameter MUST be present and MUST be understood and processed by
+implementations when these algorithms are used.
+
 
 # IANA Considerations
 
